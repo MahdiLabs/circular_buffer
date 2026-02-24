@@ -1,0 +1,26 @@
+name: Cppcheck
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cppcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install cppcheck
+        run: sudo apt-get update && sudo apt-get install -y cppcheck
+
+      - name: Run cppcheck on C sources only
+        run: |
+          FILES=$(find . -type f \( -name "*.c" -o -name "*.h" \))
+          cppcheck \
+            --enable=all \
+            --std=c11 \
+            --inconclusive \
+            --error-exitcode=1 \
+            $FILES
